@@ -93,30 +93,45 @@ PhoneSaleSystem/
 
 ---
 
-## 3. HƯỚNG DẪN CÀI ĐẶT & CHẠY DỰ ÁN
+## 3. HƯỚNG DẪN CÀI ĐẶT & CHẠY DỰ ÁN (TỪ CLONE ĐẾN CHẠY)
 
-### Bước 1: Thiết lập Cơ sở dữ liệu (SQL Server)
+> 📘 **Xem hướng dẫn chi tiết toàn tập kèm xử lý sự cố tại:** [`document/HUONG_DAN_CAI_DAT_VA_CHAY.md`](document/HUONG_DAN_CAI_DAT_VA_CHAY.md)
+
+### Bước 1: Clone mã nguồn từ GitHub về máy
+Mở PowerShell hoặc Git Bash và gõ lệnh:
+```powershell
+git clone <URL_REPO_GITHUB_CUA_BAN>
+cd PhoneSaleSystem
+```
+
+### Bước 2: Tạo và cấu hình file kết nối `.env` (Bảo mật, không sợ lộ mật khẩu)
+Tạo file `.env` từ file mẫu `.env.example`:
+```powershell
+Copy-Item .env.example .env
+```
+Mở file `.env` và điền chuỗi kết nối SQL Server trên máy của bạn:
+- **Dùng Windows Authentication (Khuyên dùng)**:
+  ```env
+  DB_CONNECTION_STRING="Server=.\SQLEXPRESS;Database=PhoneSaleDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  ```
+- **Dùng tài khoản SQL Server (`sa`)**:
+  ```env
+  DB_CONNECTION_STRING="Server=127.0.0.1,1433;Database=PhoneSaleDB;User Id=sa;Password=mat_khau_cua_ban;TrustServerCertificate=True;"
+  ```
+
+### Bước 3: Thiết lập Cơ sở dữ liệu (SQL Server)
 1. Mở **SQL Server Management Studio (SSMS)** hoặc **Azure Data Studio**.
-2. Kết nối tới SQL Server instance của bạn (ví dụ: `.` hoặc `localhost` hoặc `SQLEXPRESS`).
-3. Mở và chạy lần lượt 3 file script trong thư mục `database/`:
-   - `01_CreateDatabase_Tables.sql` (Tạo database `PhoneSaleDB` và 7 bảng)
-   - `02_StoredProcedures.sql` (Tạo các Stored Procedure)
-   - `03_SeedData.sql` (Chèn dữ liệu mẫu ban đầu)
-### Bước 2: Cấu hình chuỗi kết nối qua file `.env` (Không bị lộ mật khẩu khi commit)
-Hệ thống hỗ trợ đọc cấu hình trực tiếp từ file `.env` ở thư mục gốc (đã được cấu hình trong `.gitignore` để không bị commit lên GitHub/Git):
-1. Mở file `.env` tại thư mục gốc của dự án (hoặc sao chép từ `.env.example`).
-2. Tùy chỉnh chuỗi kết nối SQL Server của máy bạn:
-```env
-DB_CONNECTION_STRING="Server=.\\SQLEXPRESS;Database=PhoneSaleDB;Trusted_Connection=True;TrustServerCertificate=True;"
-```
-- Nếu dùng SQL Authentication (user `sa`):
-```env
-DB_CONNECTION_STRING="Server=.\\SQLEXPRESS;Database=PhoneSaleDB;User Id=sa;Password=mat_khau;TrustServerCertificate=True;"
-```
-*(Nếu không có file `.env`, hệ thống sẽ tự động dùng giá trị mặc định trong mã nguồn)*.
+2. Kết nối vào máy chủ SQL Server của bạn (ví dụ: `.\SQLEXPRESS` hoặc `.`).
+3. Mở và nhấn **Execute (F5)** lần lượt 3 file script trong thư mục `database/`:
+   - `database/01_CreateDatabase_Tables.sql` (Tạo database `PhoneSaleDB` và 7 bảng)
+   - `database/02_StoredProcedures.sql` (Tạo các Stored Procedure thống kê)
+   - `database/03_SeedData.sql` (Nạp dữ liệu mẫu ban đầu: Admin, Hãng, Điện thoại, Khách hàng)
 
-### Bước 3: Biên dịch và chạy ứng dụng
-- **Cách 1 (Bằng Visual Studio):** Mở `PhoneSaleSystem.sln`, chọn project `PhoneSaleSystem.GUI` làm Startup Project và nhấn `F5`.
+### Bước 4: Biên dịch và chạy ứng dụng
+- **Cách 1 (Bằng Visual Studio 2022 - Khuyên dùng):**
+  1. Mở file giải pháp `PhoneSaleSystem.sln`.
+  2. Chuột phải vào project `PhoneSaleSystem.GUI` ➔ Chọn **Set as Startup Project**.
+  3. Nhấn phím **F5** (hoặc nút **Start**).
 - **Cách 2 (Bằng Terminal / .NET CLI):**
   ```powershell
   dotnet run --project sourceCode/PhoneSaleSystem.GUI/PhoneSaleSystem.GUI.csproj
@@ -128,5 +143,5 @@ DB_CONNECTION_STRING="Server=.\\SQLEXPRESS;Database=PhoneSaleDB;User Id=sa;Passw
 
 | Tên đăng nhập | Mật khẩu | Quyền hạn | Mô tả phạm vi truy cập |
 | :--- | :--- | :--- | :--- |
-| **admin** | `123456` | **Admin** | Toàn quyền: Điện thoại, Bán hàng, Khách hàng, Nhân viên, Hóa đơn, Thống kê |
-| **nhanvien1** | `123456` | **NhanVien** | Bán hàng, Quản lý khách hàng, Xem danh mục điện thoại, Lập hóa đơn |
+| **admin** | `123456` | **Admin** | **Toàn quyền**: Bán hàng, Quản lý điện thoại, Khách hàng, Nhân viên, Hóa đơn, Thống kê KPI |
+| **nhanvien1** | `123456` | **NhanVien** | Bán hàng tại quầy, Quản lý khách hàng, Xem danh mục kho điện thoại, Tra cứu hóa đơn |
