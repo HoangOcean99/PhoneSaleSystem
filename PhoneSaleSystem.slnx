@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/sourceCode/">
+    <Project Path="sourceCode/PhoneSaleSystem.BLL/PhoneSaleSystem.BLL.csproj" />
+    <Project Path="sourceCode/PhoneSaleSystem.DAL/PhoneSaleSystem.DAL.csproj" />
+    <Project Path="sourceCode/PhoneSaleSystem.DTO/PhoneSaleSystem.DTO.csproj" />
+    <Project Path="sourceCode/PhoneSaleSystem.GUI/PhoneSaleSystem.GUI.csproj" />
+  </Folder>
+</Solution>
