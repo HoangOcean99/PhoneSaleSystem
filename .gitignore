@@ -1,0 +1,21 @@
+## Environment & Secrets
+.env
+.env.*
+!.env.example
+
+## Visual Studio / .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+## Office temp files
+~$*
+
+## OS generated
+Thumbs.db
+ehthumbs.db
+Desktop.ini
